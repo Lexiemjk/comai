@@ -1,0 +1,120 @@
+@keyframes rotate {
+    0% {
+      transform: rotate(0deg);
+      transform: translateX(0);
+      transform: translateY(0);
+    }
+    100% {
+      transform: rotate(360deg);
+      transform: translateX(random(100));
+      transform: translateY(random(100));
+    }
+  }
+  
+  .gradient {
+    --size: 250px;
+    --speed: 10s;
+    --easing: linear;
+  
+    z-index: -1;
+    width: var(--size);
+    height: var(--size);
+    filter: blur(calc(var(--size) / 5));
+    background-image: linear-gradient(#ecbfff, #8B00FF);
+    animation: rotate var(--speed) var(--easing) alternate infinite;
+    border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+    position: absolute;
+    opacity: 0.3;
+    overflow: hidden;
+  }
+  @for $i from 1 through 12 {
+    .gradient:nth-child(#{$i}) {
+        top: random(800)+ px;
+        left: random(1600)+ px;
+    }
+  }
+  
+  @media (min-width: 720px) {
+    .gradient {
+      --size: 400px;
+    }
+    .shadowCircle {
+        --sizeCircle: 800px;
+    }
+  }
+  
+  body {
+    background-color: #222;
+  }
+  
+  /* This is just to transition when you change the viewport size. */
+  * {
+    transition: all 0.25s ease-out;
+  }
+  
+
+  @keyframes circle {
+    0% {
+        transform: scale(1);
+    }100% {
+        transform: scale(1.5);
+    }
+  }
+
+  .shadowCircle {
+    --sizeCircle: 250px;
+    --speedCircle: 10s;
+    --easingCirlce: linear;
+  
+    z-index: -1;
+    width: var(--sizeCircle);
+    height: var(--sizeCircle);
+    filter: blur(calc(var(--size) / 5));
+    background-image: linear-gradient(#ecbfff, #8B00FF);
+    animation: circle var(--speed) var(--easing) alternate infinite;
+    border-radius: 50%;
+    position: absolute;
+    opacity: 0.5;
+    overflow: hidden;
+    top:200%;
+    left:45%;
+  }
+
+
+@keyframes rotate2 {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.gradient2 {
+  position: absolute;
+  top: 10%;
+  left: 40%;
+  --size: 250px;
+  --speed: 50s;
+  --easing: cubic-bezier(0.8, 0.2, 0.2, 0.8);
+
+  width: var(--size);
+  height: var(--size);
+  filter: blur(calc(var(--size) / 5));
+  background-image: linear-gradient(#ecbfff, #8B00FF);
+  animation: rotate2 var(--speed) var(--easing) alternate infinite;
+  border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+  opacity: 0.4;
+}
+
+
+@media (min-width: 720px) {
+  .gradient2 {
+    --size: 500px;
+  }
+}
+
+/* This is just to transition when you change the viewport size. */
+* {
+  transition: all 0.25s ease-out;
+}

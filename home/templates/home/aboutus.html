@@ -1,0 +1,42 @@
+{% extends 'home/header.html' %}
+{% load static %}
+{% block content %}
+
+    <div class="aboutus text-center position-relative">
+        <div class="gradient2"></div>
+        <div class="separator"></div>
+        <h1>C’est une bonne question… </h1>
+
+        <p>Permettez-nous de nous présenter. Nous sommes Hugo et Alexis, amis de longue date et aujourd'hui associés au sein de ComAI. Laissez-nous vous raconter notre histoire.</p>
+
+        <div class="separator"></div>
+        <div class="presentation mt-5 row">
+            <div class="col-3">
+                <img src="{% static 'home/img/aboutus_hugo.jpg' %}" width="400px" alt="">
+            </div>
+            <div class="col-6 text-start">
+                <h1>HUGO</h1>
+
+                <p>Après avoir passé plus de quatre ans à jongler avec les shakers en tant que barman, j'ai choisi de jongler avec une idée, un projet qui pourrait sembler fou à certains, mais comme on dit, "Celui qui ne tente rien n'a rien".</p>
+
+                <p>Tout au long de mes années dans le secteur de la restauration, j'ai été constamment confronté aux enjeux de la communication d'entreprise. La communication traditionnelle est devenue une norme depuis que les réseaux sociaux ont pris d'assaut le monde des affaires. C'est alors qu'une idée a émergé : pourquoi ne pas unir la force de l'intelligence artificielle et l'influence des réseaux sociaux pour révolutionner la communication d'entreprise, améliorer la présence des marques auprès de leurs clients, tout en rendant cela accessible à tous ?</p>
+
+                <p>Porté par cette vision, j'ai invité Lexie à se joindre à moi dans cette aventure. Convaincu par le potentiel transformationnel de ce projet, j'ai décidé de quitter mon emploi pour me consacrer pleinement à ComAI. Aujourd'hui, nous sommes deux, animés par une passion commune, déterminés à transformer la communication d'entreprise à travers ComAI</p>
+            </div>
+        </div>
+        <div class="line_divider mx-auto my-5"></div>
+        <div class="presentation mt-5 row">
+            <div class="col-6 offset-3 text-end">
+                <h1>LEXIE</h1>
+
+                <p>Il y a quelques années, j'ai débuté un DUT informatique dans lequel je réussissais bien. Après une année j'ai finalement décidé de l'arrêter afin de découvrir le monde de la restauration. Monde qui m'a toujours attiré.</p>
+
+                <p>Ayant rencontré Hugo durant mes années en restauration nous sommes devenu très proches et avons rencontré les mêmes problèmes face à la communication et au marketing des entreprises. Quand il m'a proposé ce projet, cela fut pour moi une évidence, j'ai donc renoué avec le domaine de l'informatique que j'avais fortement apprécié et je me suis dorénavant consacré complètement à cette idée de créer un service qui accompagnerait les entreprises dans leur communication de façon accessible, efficace et surtout abordable.</p>
+            </div>
+            <div class="col-3">
+                <img src="{% static 'home/img/aboutus_lexie.jpg' %}" width="400px" alt="">
+            </div>
+
+        </div>
+    </div>
+{% endblock content %}

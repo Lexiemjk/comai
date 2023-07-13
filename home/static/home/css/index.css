@@ -1,0 +1,563 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
+body, html {
+    overflow-x: hidden;
+  }
+
+body {
+    position: static;
+    font-family: 'Inter', sans-serif, Courier, monospace !important;
+}
+
+h1,
+h2 {
+    font-weight: 700;
+    font-family: 'Inter';
+}
+
+.purpleGradient {
+    background: -webkit-linear-gradient(left, #ecbfff, #8B00FF);
+    background: -o-linear-gradient(right, #ecbfff, #8B00FF);
+    background: -moz-linear-gradient(right, #ecbfff, #8B00FF);
+    background: linear-gradient(to right, #ecbfff, #8B00FF);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.purpleGradient-inverted {
+    background: -webkit-linear-gradient(right, #ecbfff, #8B00FF);
+    background: -o-linear-gradient(left, #ecbfff, #8B00FF);
+    background: -moz-linear-gradient(left, #ecbfff, #8B00FF);
+    background: linear-gradient(to left, #ecbfff, #8B00FF);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.bg-purpleGradient {
+    background: rgb(179, 0, 255);
+    background: -moz-linear-gradient(90deg, rgba(179, 0, 255, 1) 0%, rgba(220, 136, 255, 1) 100%);
+    background: -webkit-linear-gradient(90deg, rgba(179, 0, 255, 1) 0%, rgba(220, 136, 255, 1) 100%);
+    background: linear-gradient(90deg, rgba(179, 0, 255, 1) 0%, rgba(220, 136, 255, 1) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#b300ff", endColorstr="#dc88ff", GradientType=1);
+}
+
+.purpleGradient-Vertical {
+    background: -webkit-linear-gradient(bottom, #d3c0db, #ffffff);
+    background: -o-linear-gradient(top, #d3c0db, #ffffff);
+    background: -moz-linear-gradient(top, #d3c0db, #ffffff);
+    background: linear-gradient(top, #d3c0db, #ffffff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+@media (max-width: 1800px) {
+    .separator {
+    height: 15em !important;
+}
+}
+@media (max-width: 1200px) {
+    .separator {
+    height: 10em !important;
+}
+}
+@media (max-width: 9000px) {
+    .separator {
+    height: 8em !important;
+}
+}
+
+
+.bg-dark {
+    background-color: #0e0e0e !important;
+}
+
+.bg-purple {
+    background: #8B00FF !important;
+}
+
+.no-shadow-hover:hover {
+    box-shadow: none !important;
+}
+
+#top-navbar {
+    position: absolute;
+    top: 0px;
+    font-weight: 200;
+    z-index: 100;
+}
+
+#top-navbar a:hover {
+    color: #8B00FF !important;
+}
+
+.card {
+    background: none !important;
+}
+
+
+#presentation,
+#presentation>div {
+    height: 85em;
+}
+
+#presentation h1 {
+    font-size: 9em;
+    font-weight: 700;
+    letter-spacing: -.3rem;
+    line-height: 8rem;
+}
+
+#presentation .h3 {
+    color: #c8b5c8 !important;
+}
+
+#presentation a:hover {
+    color: #8B00FF !important;
+    transform: translateY(10px);
+    transition: 1s all ease;
+
+}
+
+#servicesPlus .card {
+    border: none;
+}
+
+#servicesPlus button:hover {
+    color: #8B00FF;
+}
+
+#servicesPlus button {
+    background: none !important;
+    border: none !important;
+    color: white;
+
+}
+
+#servicesPlus .card-text {
+    display: none;
+}
+
+.rect {
+    background-color: black;
+    width: 100%;
+    /* Vous pouvez ajuster la largeur */
+    height: 130em;
+    /* Vous pouvez ajuster la hauteur */
+    position: absolute;
+    margin: 0 auto;
+    /* Centrer le rectangle */
+}
+
+.rect::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: linear-gradient(to right, rgba(212, 212, 212, 0.5) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(212, 212, 212, 0.5) 1px, transparent 1px),
+        linear-gradient(to right, transparent, transparent 50%, rgba(255, 255, 255, 0) 100%),
+        linear-gradient(to bottom, transparent, transparent 50%, rgba(255, 255, 255, 0) 100%);
+    background-size: 100px 100px, 100px 100px, 100% 100%, 100% 100%;
+
+}
+
+.rect::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: radial-gradient(transparent, #030005);
+}
+
+#services {
+    background-color: #030005;
+}
+
+#services h1,
+#services h2 {
+    font-weight: 600;
+}
+
+#services h1 {
+    font-size: 5em;
+}
+
+#services h2 {
+    font-size: 6em;
+    font-weight: 700;
+}
+
+#services p {
+    line-height: 1.8;
+    font-size: 32px;
+}
+
+#services img {
+    max-width: 500px;
+}
+
+#service1Carousel .carousel-item,
+#service2Carousel .carousel-item {
+    height: 700px;
+}
+
+#service1Carousel h2:nth-child(1) {
+    tab-size: 1;
+}
+
+#service1Carousel h2:nth-child(2) {
+    tab-size: 5;
+}
+
+#servicesCarousel .carousel-item {
+    height: 700px;
+}
+
+#social_media img {
+    position: relative;
+    right: -250px;
+    bottom: -150px;
+
+}
+
+#gbusiness img {
+    position: relative;
+    left: -150px;
+    top: -100px;
+
+}
+
+.ServicesContainer {
+    position: relative;
+    width: auto;
+    display: flex;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+    transform-style: preserve-3d;
+    perspective: 500px;
+    margin: auto;
+}
+
+.ServicesContainer .box {
+    position: relative;
+    width: 350px;
+    height: 350px;
+    transition: 0.5s;
+    background-color: #030005;
+    transform-style: preserve-3d;
+    overflow: hidden;
+    margin-right: 15px;
+    margin-top: 45px;
+}
+
+.ServicesContainer:hover .box {
+    transform: scale(0.8);
+}
+
+.ServicesContainer .box:hover {
+    transform: rotateY(0deg) scale(1.25);
+    z-index: 1;
+    box-shadow: 0 25px 40px rgba(0, 0, 0, 0.5);
+}
+
+.ServicesContainer .box .imgBx {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.ServicesContainer .box .imgBx:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    opacity: 0;
+    transition: 0.5s;
+    mix-blend-mode: multiply;
+    background: linear-gradient(#8B00FF, #030005);
+}
+
+.ServicesContainer .box:hover .imgBx:before {
+    opacity: 1;
+}
+
+.ServicesContainer .box .imgBx img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 60%;
+    height: 60%;
+    object-fit: cover;
+}
+
+.ServicesContainer .box .content {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    display: flex;
+    padding: 20px;
+    align-items: flex-end;
+    box-sizing: border-box;
+}
+
+.ServicesContainer .box .content h2 {
+    color: #fff;
+    transition: 0.5s;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+    font-size: 22px !important;
+    font-weight: 800 !important;
+    transform: translateY(400px);
+    transition-delay: 0.3s;
+}
+
+.ServicesContainer .box:hover .content {
+    background-color: rgba(3, 0, 5, 0.6);
+}
+.ServicesContainer .box:hover .content h2 {
+    transform: translateY(0px);
+}
+
+.ServicesContainer .box .content p {
+    color: #fff;
+    transition: 0.5s;
+    font-size: 20px !important;
+    font-weight: 600;
+    transform: translateY(840px);
+    transition-delay: 0.4s;
+}
+
+.ServicesContainer .box:hover .content p {
+    transform: translateY(0px);
+}
+
+.carousel {
+    background-color: rgba(14, 14,14, 0.8);
+}
+
+.carousel button.active {
+    background-color: #8B00FF;
+}
+
+.carousel-item p {
+    margin: auto;
+    width: 60%;
+}
+
+.progress.vertical {
+    width: 10px;
+    height: 100%;
+}
+
+.progress.vertical .progress-bar {
+    width: 100%;
+    height: 50%;
+}
+
+.explication {
+    height: 150%;
+}
+
+#explicationSteps,
+#explicationSteps div {
+    height: 100%;
+}
+
+#explicationList {
+    height: 80%;
+}
+
+#explicationList a {
+    background-color: #FFF;
+}
+
+
+#explicationList a.active {
+    background-color: #8B00FF;
+}
+
+.progress.vertical {
+    height: 300px;
+    width: 30px;
+    display: flex;
+    align-items: flex-end;
+}
+
+.progress.vertical .progress-bar {
+    width: 100%;
+    transition: height 0.6s ease;
+}
+
+#lines-container {
+    position: relative;
+}
+
+#step-by-step h1 {
+    color: #d5d5d5;
+    font-size: 8em;
+    font-weight: 800;
+}
+
+#step-by-step h2 {
+    font-size: 4em;
+    font-weight: 800;
+    margin-bottom: 1em;
+}
+
+#step-by-step div figure div {
+    font-size: 1.5em;
+    position: relative;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 600;
+    line-height: normal;
+    padding: 1em;
+    color: #bbbbbb;
+
+}
+
+.td-figure {
+    perspective: 1500px;
+}
+
+#step-by-step .row:nth-of-type(even) figure div.reveal {
+    background-color: #0e0e0e;
+    color: white;
+    transform: rotateY(-10deg);
+    border-radius: 0.375em;
+    transition: .3s;
+    box-shadow: rgba(139, 0, 255, 0.3) 25px 25px, rgba(139, 0, 255, 0.2) 50px 50px, rgba(139, 0, 255, 0.1) 75px 75px, rgba(139, 0, 255, 0.05) 100px 100px, rgba(139, 0, 255, 0.05) 125px 125px;
+}
+
+#step-by-step .row:nth-of-type(odd) figure div.reveal {
+    background-color: #0e0e0e;
+    color: white;
+    transform: rotateY(10deg);
+    border-radius: 0.375em;
+    transition: .3s;
+    box-shadow: rgba(139, 0, 255, 0.3) -25px 25px, rgba(139, 0, 255, 0.2) -50px 50px, rgba(139, 0, 255, 0.1) -75px 75px, rgba(139, 0, 255, 0.05) -100px 100px, rgba(139, 0, 255, 0.05) -125px 125px;
+}
+
+.td-figure div:hover {
+    transform: rotate(0) !important;
+    box-shadow: none !important;
+}
+
+.rect2 {
+    background-color: black;
+    width: 100%;
+    /* Vous pouvez ajuster la largeur */
+    height: 20em;
+    /* Vous pouvez ajuster la hauteur */
+    position: absolute;
+    margin: auto;
+    z-index: -1;
+    /* Centrer le rectangle */
+}
+
+.rect2::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: linear-gradient(to right, rgba(212, 212, 212, 0.5) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(212, 212, 212, 0.5) 1px, transparent 1px),
+        linear-gradient(to right, transparent, transparent 50%, rgba(255, 255, 255, 0) 100%),
+        linear-gradient(to bottom, transparent, transparent 50%, rgba(255, 255, 255, 0) 100%);
+    background-size: 100px 100px, 100px 100px, 100% 100%, 100% 100%;
+
+}
+
+.rect2::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: radial-gradient(transparent, #030005);
+}
+.newsletter-separator{
+    height: 30em;
+}
+#newsletter .newsletter-form-container {
+    height: 20em;
+}
+
+#newsletter h1 {
+    font-weight: 800;
+}
+
+#newsletter input {
+    width: 80%;
+    font-size: 1.2em;
+}
+#newsletter label {
+    font-size: 2em;
+}
+
+#newsletter .btn {
+    width: 6em;
+    background-color: transparent;
+    color: #8B00FF;
+    font-size: 2em;
+    border: solid #8B00FF;
+}
+
+#newsletter .btn:hover {
+    background-color: #8B00FF;
+    color: #FFF;
+    border:none;
+}
+
+#footer-navbar {
+    position: absolute;
+}
+
+footer a:hover {
+    color: white !important;
+}
+
+/* ABOUT US  */
+
+.aboutus h1 {
+    font-size: 3em !important;
+    font-weight: 800;
+}
+
+.aboutus p {
+    font-size: 1.5em !important;
+    font-weight: 600;
+}
+
+.line_divider {
+    height: 1px;
+    background-color: grey;
+    width: 30%;
+}
+
+/* CONTACT */
+
+.contact_form {
+    margin-top: 10em;
+}
+
+.contact_form .btn {
+    background-color: #8B00FF;
+    border: none;
+}
+

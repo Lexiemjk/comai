@@ -1,0 +1,166 @@
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg);
+    transform: translateX(0);
+    transform: translateY(0);
+  }
+  100% {
+    transform: rotate(360deg);
+    transform: translateX(78);
+    transform: translateY(60);
+  }
+}
+.gradient {
+  --size: 250px;
+  --speed: 10s;
+  --easing: linear;
+  z-index: -1;
+  width: var(--size);
+  height: var(--size);
+  filter: blur(calc(var(--size) / 5));
+  background-image: linear-gradient(#ecbfff, #8B00FF);
+  animation: rotate var(--speed) var(--easing) alternate infinite;
+  border-radius: 30% 70% 70% 30%/30% 30% 70% 70%;
+  position: absolute;
+  opacity: 0.3;
+  overflow: hidden;
+}
+
+.gradient:nth-child(1) {
+  top: 782px;
+  left: 1388px;
+}
+
+.gradient:nth-child(2) {
+  top: 394px;
+  left: 502px;
+}
+
+.gradient:nth-child(3) {
+  top: 381px;
+  left: 962px;
+}
+
+.gradient:nth-child(4) {
+  top: 6px;
+  left: 1546px;
+}
+
+.gradient:nth-child(5) {
+  top: 33px;
+  left: 25px;
+}
+
+.gradient:nth-child(6) {
+  top: 783px;
+  left: 584px;
+}
+
+.gradient:nth-child(7) {
+  top: 141px;
+  left: 824px;
+}
+
+.gradient:nth-child(8) {
+  top: 283px;
+  left: 1583px;
+}
+
+.gradient:nth-child(9) {
+  top: 479px;
+  left: 643px;
+}
+
+.gradient:nth-child(10) {
+  top: 252px;
+  left: 83px;
+}
+
+.gradient:nth-child(11) {
+  top: 136px;
+  left: 470px;
+}
+
+.gradient:nth-child(12) {
+  top: 672px;
+  left: 1249px;
+}
+
+@media (min-width: 720px) {
+  .gradient {
+    --size: 400px;
+  }
+  .shadowCircle {
+    --sizeCircle: 800px;
+  }
+}
+body {
+  background-color: #222;
+}
+
+/* This is just to transition when you change the viewport size. */
+* {
+  transition: all 0.25s ease-out;
+}
+
+@keyframes circle {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(1.5);
+  }
+}
+.shadowCircle {
+  --sizeCircle: 250px;
+  --speedCircle: 10s;
+  --easingCirlce: linear;
+  z-index: -1;
+  width: var(--sizeCircle);
+  height: var(--sizeCircle);
+  filter: blur(calc(var(--size) / 5));
+  background-image: linear-gradient(#ecbfff, #8B00FF);
+  animation: circle var(--speed) var(--easing) alternate infinite;
+  border-radius: 50%;
+  position: absolute;
+  opacity: 0.5;
+  overflow: hidden;
+  top: 200%;
+  left: 45%;
+}
+
+@keyframes rotate2 {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+.gradient2 {
+  position: absolute;
+  top: 10%;
+  left: 40%;
+  --size: 250px;
+  --speed: 50s;
+  --easing: cubic-bezier(0.8, 0.2, 0.2, 0.8);
+  width: var(--size);
+  height: var(--size);
+  filter: blur(calc(var(--size) / 5));
+  background-image: linear-gradient(#ecbfff, #8B00FF);
+  animation: rotate2 var(--speed) var(--easing) alternate infinite;
+  border-radius: 30% 70% 70% 30%/30% 30% 70% 70%;
+  opacity: 0.4;
+}
+
+@media (min-width: 720px) {
+  .gradient2 {
+    --size: 500px;
+  }
+}
+/* This is just to transition when you change the viewport size. */
+* {
+  transition: all 0.25s ease-out;
+}
+
+/*# sourceMappingURL=background.css.map */

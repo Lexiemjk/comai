@@ -1,0 +1,13 @@
+{% extends 'home/header.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="contact_form col-6 offset-3">
+    <form method="post">
+        {% csrf_token %}
+        {{ form | crispy }}
+        <div class="form-group">
+                <button class="btn btn-primary" type="submit">Send</button>
+        </div>
+    </form>
+</div>
+{% endblock content %}
