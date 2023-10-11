@@ -17,12 +17,16 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
-from django.views.static import serve
 
 urlpatterns = [
-      path("", include("home.urls")),
-      path('accounts/', include('django.contrib.auth.urls')),
-      path('admin/', admin.site.urls),
-      path('tinymce/', include('tinymce.urls')),
-] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+                  path("", include("home.urls")),
+                  path("", include("users.urls")),
+                  path("app/", include("app.urls")),
+                  path('admin/', admin.site.urls),
+                  path('tinymce/', include('tinymce.urls')),
+                  path("", include("allauth.urls"))
+              ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 # [END gaestd_py_django_local_static]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

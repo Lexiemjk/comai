@@ -1,6 +1,15 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
 
+@font-face {
+    font-family: 'arialic_hollowregular';
+    src: url('../font/arialicFont/arialic_hollow-webfont.woff2') format('woff2'),
+         url('../font/arialicFont/arialic_hollow-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
 body, html {
     overflow-x: hidden;
   }
@@ -80,12 +89,6 @@ h2 {
     box-shadow: none !important;
 }
 
-#top-navbar {
-    position: absolute;
-    top: 0px;
-    font-weight: 200;
-    z-index: 100;
-}
 
 #top-navbar a:hover {
     color: #8B00FF !important;
@@ -95,29 +98,121 @@ h2 {
     background: none !important;
 }
 
-
-#presentation,
-#presentation>div {
-    height: 85em;
+.min-vh-80{
+    height: 80vh;
 }
 
-#presentation h1 {
+#presentation {
+  text-align:center;
+  overflow:hidden;
+  -webkit-backface-visibility: hidden;
+  -webkit-perspective: 1000;
+  -webkit-transform: translate3d(0,0,0);
+}
+
+#presentation .h1 {
     font-size: 9em;
     font-weight: 700;
     letter-spacing: -.3rem;
-    line-height: 8rem;
+    line-height: 0.8;
+}
+
+#text-effect {
+    display:inline-block;
+    overflow:hidden;
+    white-space:nowrap;
+    animation: showup 7s 1;
+}
+
+#text-effect-2 {
+    transform: translateY(-25px);
+    display:inline-block;
+    overflow:hidden;
+    white-space:nowrap;
+    width:auto;
+    height: 0px;
+    animation: reveal 7s 1 forwards;
+}
+
+#text-effect-2 span {
+    line-height: 1.2em;
+    margin-top:-355px;
+     animation: slidein 7s 1 forwards;
+}
+
+@keyframes showup {
+    0% {opacity:0;}
+    20% {opacity:1;}
+    100% {opacity:1;}
+}
+
+@keyframes slidein {
+    0% { margin-top:-800px; }
+    20% { margin-top:-800px; }
+    35% { margin-top:0px; }
+    100% { margin-top:0px; }
+}
+
+@keyframes reveal {
+    0% {opacity:0;height:0px;}
+    20% {opacity:1;height:0px;}
+    30% {height:1.2em;}
+    80% {opacity:1;height:1.2em;}
+    100% {opacity:1;height:1.2em;}
 }
 
 #presentation .h3 {
     color: #c8b5c8 !important;
+    transform: translateY(-38px);
+}
+
+#presentation a {
+    position: absolute;
+    bottom: 0;
+    font-size: 2em;
 }
 
 #presentation a:hover {
     color: #8B00FF !important;
     transform: translateY(10px);
     transition: 1s all ease;
-
 }
+
+/* Small devices (landscape phones, 576px and up) */
+
+/* Medium devices (tablets, 768px and up) */
+@media (min-width: 768px) {
+    #presentation .h1 {
+        font-size: 2em; /* adjust as needed */
+    }
+    #presentation .h3 {
+        font-size: 0.5em;
+    }
+}
+
+/* Large devices (desktops, 992px and up) */
+@media (min-width: 992px) {
+    #presentation .h1 {
+        font-size: 3em; /* adjust as needed */
+    }
+    #presentation .h3 {
+        font-size: 1.5em;
+    }
+}
+
+/* Extra large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) {
+    #presentation .h1 {
+        font-size: 4em; /* adjust as needed */
+    }
+}
+
+@media (min-width: 1900px) {
+    #presentation .h1 {
+        font-size: 6em; /* adjust as needed */
+    }
+}
+
 
 #servicesPlus .card {
     border: none;
@@ -138,11 +233,15 @@ h2 {
     display: none;
 }
 
+.background-div {
+    position: relative;
+}
+
 .rect {
     background-color: black;
     width: 100%;
     /* Vous pouvez ajuster la largeur */
-    height: 130em;
+    height: 100%;
     /* Vous pouvez ajuster la hauteur */
     position: absolute;
     margin: 0 auto;
@@ -178,32 +277,38 @@ h2 {
     background-color: #030005;
 }
 
-#services h1,
-#services h2 {
-    font-weight: 600;
-}
-
-#services h1 {
-    font-size: 5em;
-}
-
-#services h2 {
-    font-size: 6em;
-    font-weight: 700;
-}
-
-#services p {
-    line-height: 1.8;
-    font-size: 32px;
-}
-
-#services img {
-    max-width: 500px;
-}
 
 #service1Carousel .carousel-item,
 #service2Carousel .carousel-item {
-    height: 700px;
+    height: 500px;
+}
+
+#services h2 {
+    font-weight: 700;
+}
+
+@media (min-width: 768px) {
+     #services h2 {
+         font-size: 2em;
+     }
+}
+
+@media (min-width: 992px) {
+    #services h2 {
+         font-size: 3em;
+     }
+}
+
+@media (min-width: 1200px) {
+    #services h2 {
+         font-size: 4em;
+     }
+}
+
+@media (min-width: 2000px) {
+    #services h2 {
+         font-size: 5em;
+     }
 }
 
 #service1Carousel h2:nth-child(1) {
@@ -220,16 +325,67 @@ h2 {
 
 #social_media img {
     position: relative;
-    right: -250px;
-    bottom: -150px;
 
+}
+@media (min-width: 768px) {
+    #social_media img {
+         right: -50px;
+         bottom: 0px;
+     }
+}
+
+@media (min-width: 992px) {
+    #social_media img {
+         right: -50px;
+         bottom: -50px;
+     }
+}
+
+@media (min-width: 1200px) {
+    #social_media img {
+         right: -150px;
+         bottom: -100px;
+     }
+}
+
+@media (min-width: 2000px) {
+     #social_media img {
+         right: -350px;
+         bottom: -150px;
+     }
 }
 
 #gbusiness img {
     position: relative;
-    left: -150px;
-    top: -100px;
 
+}
+
+@media (min-width: 768px) {
+    #gbusiness img {
+         left: 0px;
+         top: 0px;
+     }
+}
+
+@media (min-width: 992px) {
+    #gbusiness img {
+         left: -50px;
+         top: 0px;
+     }
+}
+
+@media (min-width: 1200px) {
+    #gbusiness img {
+         left: -150px;
+         top: -50px;
+     }
+}
+
+@media (min-width: 2000px) {
+     #gbusiness img {
+         left: -250px;
+         top: -100px;
+     }
 }
 
 .ServicesContainer {
@@ -245,8 +401,6 @@ h2 {
 
 .ServicesContainer .box {
     position: relative;
-    width: 350px;
-    height: 350px;
     transition: 0.5s;
     background-color: #030005;
     transform-style: preserve-3d;
@@ -254,6 +408,35 @@ h2 {
     margin-right: 15px;
     margin-top: 45px;
 }
+
+@media (min-width: 768px) {
+    .ServicesContainer .box {
+        width: 50px;
+        height: 50px;
+    }
+}
+
+@media (min-width: 992px) {
+    .ServicesContainer .box {
+        width: 150px;
+        height: 150px;
+    }
+}
+
+@media (min-width: 1200px) {
+    .ServicesContainer .box {
+        width: 200px;
+        height: 200px;
+    }
+}
+
+@media (min-width: 2000px) {
+    .ServicesContainer .box {
+        width: 350px;
+        height: 350px;
+    }
+}
+
 
 .ServicesContainer:hover .box {
     transform: scale(0.8);
@@ -293,10 +476,11 @@ h2 {
 
 .ServicesContainer .box .imgBx img {
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 60%;
-    height: 60%;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    width: 70%;
+    height: 70%;
     object-fit: cover;
 }
 
@@ -318,7 +502,7 @@ h2 {
     transition: 0.5s;
     text-transform: uppercase;
     margin-bottom: 5px;
-    font-size: 22px !important;
+    font-size: 16px !important;
     font-weight: 800 !important;
     transform: translateY(400px);
     transition-delay: 0.3s;
@@ -334,10 +518,33 @@ h2 {
 .ServicesContainer .box .content p {
     color: #fff;
     transition: 0.5s;
-    font-size: 20px !important;
     font-weight: 600;
     transform: translateY(840px);
     transition-delay: 0.4s;
+}
+@media (min-width: 768px) {
+    .ServicesContainer .box .content p {
+        font-size: 4px !important;
+    }
+}
+
+@media (min-width: 992px) {
+    .ServicesContainer .box .content p {
+        font-size: 8px !important;
+    }
+}
+
+@media (min-width: 1200px) {
+    .ServicesContainer .box .content p {
+        font-size: 14px !important;
+        line-height: 1;
+    }
+}
+
+@media (min-width: 2000px) {
+    .ServicesContainer .box .content p {
+        font-size: 24px !important;
+    }
 }
 
 .ServicesContainer .box:hover .content p {
@@ -407,8 +614,31 @@ h2 {
 
 #step-by-step h1 {
     color: #d5d5d5;
-    font-size: 8em;
     font-weight: 800;
+}
+
+@media (min-width: 768px) {
+    #step-by-step h1 {
+        font-size: 2em;
+    }
+}
+
+@media (min-width: 992px) {
+    #step-by-step h1 {
+        font-size: 4em;
+    }
+}
+
+@media (min-width: 1200px) {
+    #step-by-step h1 {
+        font-size: 6em;
+    }
+}
+
+@media (min-width: 2000px) {
+    #step-by-step h1 {
+        font-size: 8em;
+    }
 }
 
 #step-by-step h2 {
@@ -417,8 +647,42 @@ h2 {
     margin-bottom: 1em;
 }
 
+#step-by-step .step-title {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#step-by-step .step-count:before{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    font-size: 30em;
+    z-index: -1;
+    font-family: 'arialic_hollowregular';
+    color: #8000ff;
+    opacity: 0.3;
+}
+
+.step-1:before{
+    content: "1";
+}
+
+.step-2:before{
+    content: "2";
+}
+
+.step-3:before{
+    content: "3";
+}
+
+.step-4:before {
+    content: "4";
+}
+
 #step-by-step div figure div {
-    font-size: 1.5em;
     position: relative;
     font-family: 'Roboto', sans-serif;
     font-weight: 600;
@@ -426,6 +690,62 @@ h2 {
     padding: 1em;
     color: #bbbbbb;
 
+}
+
+@media (min-width: 768px) {
+    #step-by-step h1 {
+        font-size: 2em;
+    }
+
+    #step-by-step h2 {
+        font-size: 1em;
+    }
+
+    #step-by-step div figure div {
+        font-size: .8em;
+    }
+}
+
+@media (min-width: 992px) {
+    #step-by-step h1 {
+        font-size: 4em;
+    }
+
+    #step-by-step h2 {
+        font-size: 2em;
+    }
+
+    #step-by-step div figure div {
+        font-size: 1em;
+    }
+}
+
+@media (min-width: 1200px) {
+    #step-by-step h1 {
+        font-size: 6em;
+    }
+
+    #step-by-step h2 {
+        font-size: 3em;
+    }
+
+    #step-by-step div figure div {
+        font-size: 1.2em;
+    }
+}
+
+@media (min-width: 2000px) {
+    #step-by-step h1 {
+        font-size: 8em;
+    }
+
+    #step-by-step h2 {
+        font-size: 4em;
+    }
+
+    #step-by-step div figure div {
+        font-size: 1.5em;
+    }
 }
 
 .td-figure {
@@ -537,12 +857,20 @@ footer a:hover {
 .aboutus h1 {
     font-size: 3em !important;
     font-weight: 800;
+    color: #dadada;
 }
 
 .aboutus p {
-    font-size: 1.5em !important;
+    font-size: 1.2em !important;
     font-weight: 600;
+    color: #dadada;
 }
+@media (min-width: 1900px) {
+    .aboutus p {
+        font-size: 1.5em !important;
+    }
+}
+
 
 .line_divider {
     height: 1px;

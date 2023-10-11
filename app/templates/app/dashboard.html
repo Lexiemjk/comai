@@ -1,0 +1,48 @@
+{% extends 'app/header.html' %}
+{% load static %}
+{% block content %}
+    {% load crispy_forms_tags %}
+    {% load mathfilters %}
+
+    <div class="container">
+
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form | crispy }}
+            <button class="btn btn-primary" type="submit">Upload and Analyze</button>
+        </form>
+
+    </div>
+
+
+    <div id="image-container" style="position:relative; display:inline-block;">
+        <!-- Display the image -->
+        <img id="uploaded-image" src="{{ img_url }}" style="width:500px; height: 500px">
+        {% if annotations %}
+            <!-- Overlay bounding boxes -->
+            {% for annotation in annotations %}
+                {% if annotation.x_min %}
+                    <div style="position:absolute; border:2px solid red;
+                            left:{{ annotation.x_min|mul:500 }}px; top:{{ annotation.y_min|mul:500 }}px;
+                            width:{{ annotation.width|mul:500 }}px;
+                            height:{{ annotation.height|mul:500 }}px;">
+                <span style="background-color:red; color:white;">
+                    {{ annotation.label }}
+                </span>
+                    </div>
+                {% else %}
+                    <div style="display: inline-block">
+                    <span style="border: 2px solid red; padding:1px; color:black;">
+                    {{ annotation.label }}
+                    </span>
+                    </div>
+                {% endif %}
+            {% endfor %}
+
+        {% endif %}
+
+    {%  if caption %}
+        <p class="text-primary-emphasis">{{ caption }}</p>
+    {% endif %}
+    </div>
+{% endblock %}

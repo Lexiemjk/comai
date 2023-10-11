@@ -1,0 +1,14 @@
+{% extends "home/header.html" %}
+
+{% block content %}
+    {% load crispy_forms_tags %}
+    <h2>Register</h2>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form | crispy }}
+        <input type="submit" value="Register">
+    </form>
+
+    <a href="{% url 'login' %}">Back to login</a>
+{% endblock %}

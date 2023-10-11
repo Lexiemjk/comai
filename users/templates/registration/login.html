@@ -1,0 +1,53 @@
+{% extends "home/header.html" %}
+
+{% block content %}
+    {% load crispy_forms_tags %}
+    {% load socialaccount %}
+    {% providers_media_js %}
+
+    {% if form.errors %}
+        <div class="alert alert-danger">
+            {{ form.errors }}
+        </div>
+    {% endif %}
+
+    {% if next %}
+        {% if user.is_authenticated %}
+            <p>Your account doesn't have access to this page. To proceed,
+                please login with an account that has access.</p>
+        {% else %}
+            <p>Please login to see this page.</p>
+        {% endif %}
+    {% endif %}
+
+    <form method="post" action="{% url 'login' %}">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <input type="submit" value="login">
+        <input type="hidden" name="next" value="{{ next }}">
+    </form>
+
+    <button class="btn btn-outline-info">
+        <a href="{% provider_login_url 'google' %}?next=/">
+            <i class="fab fa-google"></i>
+            Login with Google
+        </a>
+    </button>
+
+    <button class="btn btn-outline-info">
+        <a href="{% provider_login_url 'facebook' method="oauth2" next="home:index"%}?next=/">
+            <i class="fab fa-facebook"></i>
+            Login with facebook
+        </a>
+    </button>
+
+    <button class="btn btn-outline-info">
+        <a href="{% provider_login_url 'instagram' %}?next=/">
+            <i class="fab fa-instagram"></i>
+            Login with Instagram
+        </a>
+    </button>
+    {# Assumes you setup the password_reset view in your URLconf #}
+    <p><a href="{% url 'password_reset' %}">Lost password?</a></p>
+
+{% endblock %}

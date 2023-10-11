@@ -1,8 +1,11 @@
+import os
+
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
 from django.core.mail import EmailMessage
+from django.http import FileResponse, Http404
 
 from .forms import NewsletterForm, ContactForm
 from .models import SubscribedUsers
@@ -93,3 +96,20 @@ def contact(request):
     else:
         form = ContactForm()
     return render(request, 'home/contact.html', {'form': form})
+
+def dpp(request):
+    dpp_url = os.path.join('home/static/home/', 'politique_de_confidentialite.pdf')
+    try:
+        return FileResponse(open(dpp_url, 'rb'), content_type='application/pdf')
+    except FileNotFoundError:
+        return render(request, 'home/index.html')
+
+def cgv(request):
+    cgv_url = os.path.join('home/static/home/', 'cgv.pdf')
+    try:
+        return FileResponse(open(cgv_url, 'rb'), content_type='application/pdf')
+    except FileNotFoundError:
+        return render(request, 'home/index.html')
+
+def handler_404(request, exception):
+    return render(request, 'home/404handler.html')

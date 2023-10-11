@@ -19,6 +19,8 @@ from urllib.parse import urlparse
 import environ
 from google.cloud import secretmanager
 
+SITE_ID = 2
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -37,7 +39,11 @@ elif os.getenv("TRAMPOLINE_CI", None):
     placeholder = (
         f"SECRET_KEY=a\n"
         f"DATABASE_URL=sqlite://{os.path.join(BASE_DIR, 'db.sqlite3')}"
+
     )
+    PROJECT_PATH = os.path.join(os.path.abspath(os.path.split(__file__)[0]), '..')
+    MEDIA_ROOT = os.path.join(PROJECT_PATH, 'site_media')
+    MEDIA_URL = '/site_media/'
     env.read_env(io.StringIO(placeholder))
 # [END_EXCLUDE]
 elif os.environ.get("GOOGLE_CLOUD_PROJECT", None):
@@ -50,6 +56,16 @@ elif os.environ.get("GOOGLE_CLOUD_PROJECT", None):
     payload = client.access_secret_version(name=name).payload.data.decode("UTF-8")
 
     env.read_env(io.StringIO(payload))
+    CLIENT_ID = env("CLIENT_ID")
+    CLIENT_SECRET = env("CLIENT_SECRET")
+    OPENAI_KEY = env("OPENAI_KEY")
+    EDENAI_KEY = env("EDENAI_KEY")
+
+    DEFAULT_FILE_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
+    GS_BUCKET_NAME = env("GS_BUCKET_NAME")
+    GS_DEFAULT_ACL = 'publicRead'
+    MEDIA_URL = "https://storage.googleapis.com/{}/".format(GS_BUCKET_NAME)
+
 else:
     raise Exception("No local .env or GOOGLE_CLOUD_PROJECT detected. No secrets found.")
 # [END gaestd_py_django_secret_config]
@@ -58,8 +74,7 @@ SECRET_KEY = env("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # Change this to "False" when you are ready for production
-DEBUG = env("DEBUG")
-
+DEBUG = True
 
 # [START gaestd_py_django_csrf]
 # SECURITY WARNING: It's recommended that you use this when
@@ -73,7 +88,10 @@ if APPENGINE_URL:
 
     ALLOWED_HOSTS = [urlparse(APPENGINE_URL).netloc,
                      'comai.app',
-                     'www.comai.app']
+                     'www.comai.app',
+                     'localhost',
+                     '127.0.0.1',
+                     'https://732d-2a01-cb05-9641-a700-594a-50bb-3bc1-e3e5.ngrok.io']
     CSRF_TRUSTED_ORIGINS = [APPENGINE_URL]
     SECURE_SSL_REDIRECT = True
 else:
@@ -83,17 +101,27 @@ else:
 # Application definition
 
 INSTALLED_APPS = [
+    "users",
     "home.apps.HomeConfig",
+    "app.apps.AppConfig",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "django_extensions",
+    "mathfilters",
     'compressor',
     'bootstrap5',
     'crispy_forms',
     'crispy_bootstrap5',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
+    'allauth.socialaccount.providers.facebook',
+    'allauth.socialaccount.providers.instagram',
 
 ]
 
@@ -112,7 +140,7 @@ ROOT_URLCONF = "config.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [os.path.join(BASE_DIR, 'users/templates')],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -191,7 +219,6 @@ MESSAGE_STORAGE = "django.contrib.messages.storage.cookie.CookieStorage"
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
 
-
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_FROM = 'saas.comai@gmail.com'
@@ -202,4 +229,65 @@ EMAIL_USE_TLS = True
 
 PASSWORD_RESET_TIMEOUT = 14400
 
+AUTH_USER_MODEL = "users.CustomUser"
+
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'
+
+OAUTHLIB_RELAX_TOKEN_SCOPE = True
+
+SOCIALACCOUNT_LOGIN_ON_GET = True
+
+AUTHENTICATION_BACKENDS = [
+    'allauth.account.auth_backends.AuthenticationBackend'
+]
+
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'SCOPE': [
+            'profile',
+            'email',
+            'https://www.googleapis.com/auth/business.manage'
+        ],
+        'AUTH_PARAMS': {
+            'access_type': 'offline',
+        }
+    },
+    'facebook': {
+        'METHOD': 'oauth2',  # Set to 'js_sdk' to use the Facebook connect SDK
+        'SCOPE': ['email', 'public_profile', 'instagram_basic', 'pages_show_list',
+                  'business_management',
+                  'pages_read_engagement',
+                  'pages_manage_metadata',
+                  'pages_read_user_content',
+                  'pages_manage_ads',
+                  'pages_manage_posts',
+                  'pages_manage_engagement'],
+        'AUTH_PARAMS': {'auth_type': 'reauthenticate'},
+        'INIT_PARAMS': {'cookie': True},
+        'FIELDS': [
+            'id',
+            'first_name',
+            'last_name',
+            'middle_name',
+            'name',
+            'name_format',
+            'picture',
+            'short_name'
+        ],
+        'EXCHANGE_TOKEN': True,
+        'VERIFIED_EMAIL': False,
+        'LOCALE_FUNC': lambda request: 'fr_FR',
+        'VERSION': 'v18.0',
+    }
+}
+
+ACCOUNT_EMAIL_REQUIRED = True
+
+ACCOUNT_AUTHENTICATION_METHOD = "email"
+SOCIALACCOUNT_STORE_TOKENS = True
+
 LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
