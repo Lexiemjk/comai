@@ -34,65 +34,119 @@
 </head>
 
 <body class='text-white'>
-<div class="row">
-    <div class="col-2">
-        <div class="d-flex flex-column flex-shrink-0 p-3 text-bg-dark" id="sidebarMenu">
-            <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
-                <span class="fs-4">Menu</span>
-            </a>
-            <hr>
-            <ul class="nav nav-pills flex-column mb-auto">
-                <li>
-                    <a href="{% url 'app:dashboard' %}"
-                       class="nav-link text-white {% if request.resolver_match.url_name == 'dashboard' %}active {% endif %}">
-                        Dashboard
-                    </a>
-                </li>
-                <li>
-                    <a href="{% url 'app:googleManager' %}"
-                       class="nav-link text-secondary disabled {% if request.resolver_match.url_name == 'googleManager' %}active{% endif %}"
-                       tabindex="-1" aria-disabled="true">
-                        Google Business
-                    </a>
-                </li>
-                <li>
-                    <a href="{% url 'app:fbManager' %}"
-                       class="nav-link text-secondary disabled {% if request.resolver_match.url_name == 'fbManager' %} active {% endif %}"
-                       tabindex="-1" aria-disabled="true">
-                        Facebook
-                    </a>
-                </li>
-                <li>
-                    <a href="{% url 'app:instaManager' %}"
-                       class="nav-link text-secondary disabled {% if request.resolver_match.url_name == 'instaManager' %} active {% endif %}"
-                       tabindex="-1" aria-disabled="true">
-                        Instagram
-                    </a>
-                </li>
-            </ul>
-            <hr>
-            <div class="dropdown">
-                <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
-                   data-bs-toggle="dropdown" aria-expanded="false">
-                    <strong>mdo</strong>
-                </a>
-                <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
-                    <li><a class="dropdown-item" href="#">Settings</a></li>
-                    <li><a class="dropdown-item" href="#">Profile</a></li>
-                    <li>
-                        <hr class="dropdown-divider">
+<!-- Top Navigation Bar -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <img class="navbar-brand mx-5" src="{% static 'home/img/logoNoText.png' %}" width="64px" alt="Logo">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item align-self-center">
+                <select class="form-select">
+                    <option selected>Open this select menu</option>
+                    <option value="1">One</option>
+                    <option value="2">Two</option>
+                    <option value="3">Three</option>
+                </select>
+            </li>
+
+            <li class="nav-item mx-5">
+                <img class="rounded-circle" src="https://placehold.co/64">
+            </li>
+        </ul>
+        <div class="ms-auto me-3">
+            <button class=" btn btn-primary">Mon compte</button>
+        </div>
+
+    </div>
+</nav>
+
+<!-- Side Navigation Bar -->
+<div class="flex-shrink-0 p-3 border-end" id="sidebarMenu" style="width: 280px;">
+    <ul class="list-unstyled ps-0">
+        <li class="mb-1">
+            <button class="btn btn-dashboard d-inline-flex align-items-center rounded border-0" data-bs-toggle="collapse"
+                    data-bs-target="#home-collapse" aria-expanded="true">
+                DashBoard
+            </button>
+        </li>
+        <li class="mb-1">
+            <h3 class="h3 text-black">Communication</h3>
+            <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed"
+                    data-bs-toggle="collapse" data-bs-target="#google-collapse" aria-expanded="false">
+                Google
+            </button>
+            <div class="collapse" id="google-collapse">
+                <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                    <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Avis</a>
                     </li>
-                    <li><a class="dropdown-item" href="#">Sign out</a></li>
+                    <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Paramètres</a>
+                    </li>
                 </ul>
             </div>
-        </div>
-    </div>
-    <div class="col-10">
-        {% block content %}
-        {% endblock %}
-    </div>
-</div>
+        </li>
+        <li class="mb-1">
+            <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed"
+                    data-bs-toggle="collapse" data-bs-target="#facebook-collapse" aria-expanded="false">
+                Facebook
+            </button>
+            <div class="collapse" id="facebook-collapse">
+                <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                    <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Publications</a></li>
+                    <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Commentaires</a>
+                    </li>
+                    <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Paramètres</a>
+                    </li>
+                </ul>
+            </div>
+        </li>
+        <li class="mb-1">
+            <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed"
+                    data-bs-toggle="collapse" data-bs-target="#instagram-collapse" aria-expanded="false">
+                Instagram
+            </button>
+            <div class="collapse" id="instagram-collapse">
+                <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                    <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Publications</a></li>
+                    <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Commentaires</a>
+                    </li>
+                    <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Paramètres</a>
+                    </li>
+                </ul>
+            </div>
+        </li>
+        <li class="mb-1">
+            <h3 class="h3 text-black">Analyse</h3>
+            <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed"
+                    data-bs-toggle="collapse" data-bs-target="#google-analytics-collapse" aria-expanded="false">
+                Google Analytics
+            </button>
+        </li>
+        <li class="mb-1">
+            <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed"
+                    data-bs-toggle="collapse" data-bs-target="#facebook-analytics-collapse" aria-expanded="false">
+                Facebook Analytics
+            </button>
+        </li>
+        <li class="mb-1">
+            <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed"
+                    data-bs-toggle="collapse" data-bs-target="#instagram-analytis-collapse" aria-expanded="false">
+                Instagram Analytics
+            </button>
+        </li>
+        <li class="mb-1">
+            <h3 class="h3 text-black">Analyse</h3>
+            <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed"
+                    data-bs-toggle="collapse" data-bs-target="#img-librairy-collapse" aria-expanded="false">
+                Bibliothèque d'Images
+            </button>
+        </li>
 
+    </ul>
+</div>
 
 </body>
 
