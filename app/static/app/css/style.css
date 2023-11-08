@@ -4,7 +4,7 @@
     background-color: transparent;
 }
 
-.btn-dashboard::before {
+.btn-no-collapse::before {
     width: 1.25em;
     line-height: 0;
     content: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-dot" viewBox="0 0 16 16"><path d="M8 9.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"/></svg>');
@@ -37,12 +37,14 @@
     margin-left: 1.25rem;
 }
 
-.btn-toggle a:hover,
-.btn-toggle a:focus,
+.btn-toggle:hover,
+.btn-toggle:focus,
+.btn-no-collapse:hover,
+.btn-no-collapse:focus,
 .btn-toggle-nav a:hover,
 .btn-toggle-nav a:focus {
-    color: #8B00FF;
-    background-color: lightgray;
+    color: #8B00FF !important;
+    background-color: lightgray !important;;
 }
 
 #sidebarMenu {

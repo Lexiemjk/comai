@@ -29,8 +29,11 @@ STAR_RATING_MAP = {
 
 @login_required
 def dashboard(request):
+
     if request.user.first_connection:
         return redirect('app:config')
+    else:
+        locations = Location.objects.filter(owner=request.user)
 
     if request.method == "POST":
         form = forms.fileDemoForm(request.POST, request.FILES)
@@ -66,11 +69,11 @@ def dashboard(request):
                 keywords += img_name
                 caption = generateInstaCaption(keywords)
                 return render(request, 'app/dashboard.html',
-                              {'form': form, 'img_url': img_url, 'annotations': annotations, 'caption': caption})
+                              {'form': form, 'img_url': img_url, 'annotations': annotations, 'caption': caption, 'locations': locations})
     else:
         form = forms.fileDemoForm()
 
-    return render(request, 'app/dashboard.html', {'form': form})
+    return render(request, 'app/dashboard.html', {'form': form, 'locations' : locations})
 
 
 def objectDetection(img_url):

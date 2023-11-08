@@ -8,10 +8,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7df1048e-1e6a-465f-9494-49a7ef2e64b9" name="Changes" comment="V1.01 demo">
+    <list default="true" id="7df1048e-1e6a-465f-9494-49a7ef2e64b9" name="Changes" comment="V1.01 demo. navbar">
+      <change afterPath="$PROJECT_DIR$/app/templates/app/base.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/static/app/css/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/app/static/app/css/style.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/templates/app/dashboard.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/app/dashboard.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/templates/app/header.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/app/header.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/views.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -162,7 +165,7 @@
       <workItem from="1697102582179" duration="4942000" />
       <workItem from="1697186948481" duration="40000" />
       <workItem from="1697626828944" duration="1169000" />
-      <workItem from="1699448471940" duration="7348000" />
+      <workItem from="1699448471940" duration="12140000" />
     </task>
     <task id="LOCAL-00001" summary="V0.9">
       <option name="closed" value="true" />
@@ -196,7 +199,15 @@
       <option name="project" value="LOCAL" />
       <updated>1699448592417</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="V1.01 demo. navbar">
+      <option name="closed" value="true" />
+      <created>1699456430705</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1699456430705</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -229,6 +240,7 @@
     <MESSAGE value="V0.9" />
     <MESSAGE value="V1.0 landing page finished" />
     <MESSAGE value="V1.01 demo" />
-    <option name="LAST_COMMIT_MESSAGE" value="V1.01 demo" />
+    <MESSAGE value="V1.01 demo. navbar" />
+    <option name="LAST_COMMIT_MESSAGE" value="V1.01 demo. navbar" />
   </component>
 </project>
