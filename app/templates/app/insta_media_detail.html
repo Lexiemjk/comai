@@ -1,0 +1,24 @@
+{% extends 'app/base.html' %}
+{% load static %}
+{% block header %}
+    {% include 'app/header.html' with locations=locations %}
+{% endblock %}
+{% block content %}
+    {% load crispy_forms_tags %}
+    {% load mathfilters %}
+    <h1>Instagram Media Detail</h1>
+
+    <div class="card card-insta-dash col-6 text-center m-5">
+        <!-- Your detail content here -->
+        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary">
+            <i class="bi bi-instagram h2"></i>
+            <span class="visually-hidden">Instagram</span>
+        </span>
+        <img width="300" src="{{ insta_media.media_url }}" class="card-img-top" alt="{{ insta_media.caption }}">
+        <div class="card-header">{{ insta_media.published_at }}</div>
+        <div class="card-body">
+            <h4 class="card-title text-primary-emphasis">{{ insta_media.caption }}</h4>
+            <!-- Other details specific to the media item -->
+        </div>
+    </div>
+{% endblock %}

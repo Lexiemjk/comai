@@ -7,54 +7,128 @@
     {% load crispy_forms_tags %}
     {% load mathfilters %}
 
-    <div class="container">
 
-        {{ locations }}
+    <h1 class="h1 text-primary">Dashboard</h1>
 
-        <form method="POST" enctype="multipart/form-data">
-            {% if messages %}
-                <ul class="messages">
-                    {% for message in messages %}
-                        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-                    {% endfor %}
-                </ul>
-            {% endif %}
-            {% csrf_token %}
-            {{ form | crispy }}
-            <button class="btn btn-primary" type="submit">Upload and Analyze</button>
-        </form>
+    <div class="row dashboard-first-row justify-content-around">
 
+        {% if last_review %}
+            <div class="card min-height-card  card-google-dash col-2 text-center m-5">
+        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary">
+            <i class="bi bi-google h2"></i>
+            <span class="visually-hidden">Google</span>
+        </span>
+                <div class="card-header">{{ last_review.pub_at }}</div>
+                <div class="card-body">
+                    <h4 class="card-title text-primary-emphasis">{{ last_review.reviewer_name }}</h4>
+                    <p class="card-text text-dark">{{ last_review.comment }}</p>
+                    <a href="{% url 'app:googleManager' %}" class="card-link">Voir plus </a>
+                </div>
+                <div class="card-footer"> {% for x in stars %}<i class="bi bi-star-fill text-primary"></i>{% endfor %}
+                    {% for x in no_stars %}<i class="bi bi-star text-primary"></i>{% endfor %}</div>
+            </div>
+        {% else %}
+            <div class="card min-height-card  card-google-dash col-2 text-center m-5">
+        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary">
+            <i class="bi bi-google h2"></i>
+            <span class="visually-hidden">Google</span>
+        </span>
+                <div class="card-body">
+                    <p class="card-text text-dark">Pas de dernier avis.</p>
+                    <a href="{% url 'app:googleManager' %}" class="card-link">Voir plus </a>
+                </div>
+            </div>
+        {% endif %}
+        <div class="card card-facebook-dash min-height-card  col-3 text-center m-5">
+        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary">
+            <i class="bi bi-facebook h2"></i>
+            <span class="visually-hidden">Facebook</span>
+        </span>
+            <div class="card-body">
+                <p class="card-text text-dark">Pas de dernier post / Commentaires</p>
+                <a href="{% url 'app:fbManager' %}" class="card-link">Voir plus </a>
+            </div>
+        </div>
+
+
+        <div class="card card-insta-dash col-3 text-center m-5">
+        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary">
+            <i class="bi bi-instagram h2"></i>
+            <span class="visually-hidden">Instagram</span>
+        </span>
+            <img width="300" src="{{ last_insta_media.media_url }}" class="card-img-top"
+                 alt="{{ last_insta_media.caption }}">
+            <div class="card-header">{{ last_insta_media.published_at }}</div>
+            <div class="card-body">
+                <h4 class="card-title text-primary-emphasis">{{ last_insta_media.caption }}</h4>
+                <p class="card-text">{{ last_insta_comment }}</p>
+                <a href="{% url 'app:googleManager' %}" class="card-link">Voir plus </a>
+            </div>
+        </div>
     </div>
 
-
-    <div id="image-container" style="position:relative; display:inline-block;">
-        <!-- Display the image -->
-        <img id="uploaded-image" src="{{ img_url }}" style="width:500px; height: 500px">
-        {% if annotations %}
-            <!-- Overlay bounding boxes -->
-            {% for annotation in annotations %}
-                {% if annotation.x_min %}
-                    <div style="position:absolute; border:2px solid red;
-                            left:{{ annotation.x_min|mul:500 }}px; top:{{ annotation.y_min|mul:500 }}px;
-                            width:{{ annotation.width|mul:500 }}px;
-                            height:{{ annotation.height|mul:500 }}px;">
-                <span style="background-color:red; color:white;">
-                    {{ annotation.label }}
+    <div class="row">
+        <div class="card min-height-card col-2 m-2">
+                <span class="position-absolute top-0 start-100 translate-middle p-2 bg-primary border border-light rounded-circle">
+                    <span class="visually-hidden">Nouvelles notifications</span>
                 </span>
-                    </div>
-                {% else %}
-                    <div style="display: inline-block">
-                    <span style="border: 2px solid red; padding:1px; color:black;">
-                    {{ annotation.label }}
+            <div class="card-body">
+                <h4 class="card-title text-primary-emphasis">Notifications</h4>
+                <p>Pas de nouvelle notifications</p>
+            </div>
+        </div>
+        <div class="card min-height-card col-2 m-2">
+                <span class="position-absolute top-0 start-100 translate-middle p-2 bg-danger border border-light rounded-circle">
+                        <span class="visually-hidden">Nouvelles alertes</span>
                     </span>
+            <div class="card-body">
+                <h4 class="card-title text-danger-emphasis">Alertes</h4>
+                <p>Pas de nouvelle Alertes</p>
+            </div>
+        </div>
+
+        <div class="col-7">
+            <h2 class="h2 text-secondary-emphasis"> Vue d'ensemble</h2>
+            <div class="row">
+                <div class="col-lg-3 col-sm-6 m-5">
+                    <label for="Date">Date</label>
+                    <input id="Date" class="form-control" type="date" value="12-07-2023"/>
+                    <span id="DateSelected"></span>
+                </div>
+            </div>
+            <div class="row justify-content-around">
+                <div class="card col-3">
+                    <div class="card-body">
+                        <h3 class="card-title text-primary">
+                            Visiteur
+                        </h3>
+                        <p class="card-text text-primary-emphasis">0 visiteur</p>
+                        <a class="h5 card-link text-secondary" href="#"> voir plus -></a>
                     </div>
-                {% endif %}
-            {% endfor %}
+                </div>
+                <div class="card col-3">
+                    <div class="card-body">
+                        <h3 class="card-title text-warning">
+                            Interactions
+                        </h3>
+                        <p class="card-text text-warning-emphasis">0 interactions</p>
+                        <a class="h5 card-link text-secondary" href="#"> voir plus -></a>
+                    </div>
+                </div>
+                <div class="card col-3">
+                    <div class="card-body">
+                        <h3 class="card-title text-success">
+                            Chiffres d'affaires
+                        </h3>
+                        <p class="card-text text-success-emphasis">0 €</p>
+                        <a class="h5 card-link text-secondary" href="#"> voir plus -></a>
+                    </div>
+                </div>
+            </div>
 
-        {% endif %}
 
-        {% if caption %}
-            <p class="text-primary-emphasis">{{ caption }}</p>
-        {% endif %}
+        </div>
     </div>
+
+
 {% endblock %}

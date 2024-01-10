@@ -1,5 +1,33 @@
-{% extends 'app/header.html' %}
+{% extends 'app/base.html' %}
 {% load static %}
+{% block header %}
+    {% include 'app/header.html' with locations=locations %}
+{% endblock %}
 {% block content %}
-    <p>Instagram Manager</p>
+    {% load crispy_forms_tags %}
+    {% load mathfilters %}
+    <h1>Instagram Manager</h1>
+
+    <div class="row">
+        {% for insta_media in insta_medias %}
+            <div class="card card-insta-dash col-2 text-center m-3">
+                <!-- Your card content here -->
+                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary">
+                    <i class="bi bi-instagram h2"></i>
+                    <span class="visually-hidden">Instagram</span>
+                </span>
+                <img width="300" src="{{ insta_media.media_url }}" class="card-img-top" alt="{{ insta_media.caption }}">
+                <div class="card-header">{{ insta_media.published_at }}</div>
+                <div class="card-body">
+                    <h4 class="card-title text-primary-emphasis">{{ insta_media.caption }}</h4>
+                    <a href="{% url 'app:insta_media_detail' pk=insta_media.instagram_media_id %}" class="card-link">Voir plus</a>
+                </div>
+            </div>
+
+            {% if forloop.counter|divisibleby:3 and not forloop.last %}
+                </div><div class="row">
+            {% endif %}
+        {% endfor %}
+    </div>
+
 {% endblock %}

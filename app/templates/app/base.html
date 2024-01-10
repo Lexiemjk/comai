@@ -44,10 +44,10 @@
             <div class="flex-shrink-0 p-3 border-end" id="sidebarMenu">
                 <ul class="list-unstyled ps-0">
                     <li class="mb-1">
-                        <button class="btn btn-no-collapse d-inline-flex align-items-center rounded border-0 fs-4"
+                        <a href="{% url 'app:dashboard' %}" class="btn btn-no-collapse d-inline-flex align-items-center rounded border-0 fs-4"
                                 aria-expanded="true">
                             <i class="bi bi-house-fill pe-2"></i> DashBoard
-                        </button>
+                        </a>
                     </li>
                     <li class="mb-1 mt-5">
                         <h3 class="h3 text-black"><i class="bi bi-share-fill pe-2"></i> Communication</h3>
@@ -57,10 +57,10 @@
                         </button>
                         <div class="collapse" id="google-collapse">
                             <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                                <li><a href="#"
+                                <li><a href="{% url 'app:googleManager' %}"
                                        class="link-body-emphasis d-inline-flex text-decoration-none rounded fs-5">Avis</a>
                                 </li>
-                                <li><a href="#"
+                                <li><a href="{% url 'app:googleManagerPreferences' %}"
                                        class="link-body-emphasis d-inline-flex text-decoration-none rounded fs-5">Paramètres</a>
                                 </li>
                             </ul>
@@ -73,11 +73,8 @@
                         </button>
                         <div class="collapse" id="facebook-collapse">
                             <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small fs-4">
-                                <li><a href="#"
+                                <li><a href="{% url 'app:fbManager' %}"
                                        class="link-body-emphasis d-inline-flex text-decoration-none rounded fs-5">Publications</a>
-                                </li>
-                                <li><a href="#"
-                                       class="link-body-emphasis d-inline-flex text-decoration-none rounded fs-5">Commentaires</a>
                                 </li>
                                 <li><a href="#"
                                        class="link-body-emphasis d-inline-flex text-decoration-none rounded fs-5">Paramètres</a>
@@ -92,11 +89,8 @@
                         </button>
                         <div class="collapse" id="instagram-collapse">
                             <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                                <li><a href="#"
+                                <li><a href="{% url 'app:instaManager' %}"
                                        class="link-body-emphasis d-inline-flex text-decoration-none rounded fs-5">Publications</a>
-                                </li>
-                                <li><a href="#"
-                                       class="link-body-emphasis d-inline-flex text-decoration-none rounded fs-5">Commentaires</a>
                                 </li>
                                 <li><a href="#"
                                        class="link-body-emphasis d-inline-flex text-decoration-none rounded fs-5">Paramètres</a>

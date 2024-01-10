@@ -5,14 +5,13 @@ from google.oauth2.credentials import Credentials
 from googleapiclient.discovery import build
 
 from allauth.socialaccount.models import SocialToken, SocialAccount
-from django.core.files.storage import default_storage
-from django.shortcuts import render, redirect, reverse
+from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from django.contrib import messages
+from django.views.generic import DetailView
 from django.conf import settings
 from .models import Location, Categorie, Service, Review, InstagramMedia, InstagramMediaComment, Photo, PhotoObject
 from . import forms
-from users.forms import AnswerPreferenceForm, finishConfigForm
+from users.forms import AnswerPreferenceForm, finishConfigForm, GooglePreferencesForm
 import requests
 import openai
 
@@ -29,51 +28,28 @@ STAR_RATING_MAP = {
 
 @login_required
 def dashboard(request):
-
     if request.user.first_connection:
         return redirect('app:config')
     else:
         locations = Location.objects.filter(owner=request.user)
+        last_review = Review.objects.filter(location=locations.last()).last()
+        if last_review:
+            stars = range(last_review.star_rating)
+            no_stars = range(5 - last_review.star_rating)
 
-    if request.method == "POST":
-        form = forms.fileDemoForm(request.POST, request.FILES)
-        if form.is_valid():
-            img = request.FILES['file']
-            img_name = form.cleaned_data['title']
+        token = SocialToken.objects.get(account__user=request.user, account__provider='facebook')
 
-            existing_photo = Photo.objects.filter(title=img_name, author=request.user).first()
-            if existing_photo:
-                messages.error(request, "A photo with the same name have already been uploaded")
-                img_url = existing_photo.url
-            else:
-                filename = default_storage.save('uploads/' + img_name, img)
-                img_url = default_storage.url(filename)
+        insta_id = requestInstagramAccount(token)
+        medias = requestInstagramMedia(request, token, insta_id)
 
-                new_photo = Photo(
-                    title=img_name,
-                    url=img_url,
-                    author=request.user
-                )
-                new_photo.save()
-                messages.success(request, "Photo uploaded successfully.")
-            response_data = objectDetection(img_url)
+        last_insta_media = InstagramMedia.objects.filter(author=request.user).last()
+        last_insta_comment = InstagramMediaComment.objects.filter(media_related=last_insta_media).last()
 
-            if response_data:
-                annotations_clairifai = extract_annotations(response_data.get('clarifai', {}).get('items', []), img_url)
-                annotations_google = extract_annotations(response_data.get('google', {}).get('items', []), img_url)
-                annotations_amazon = extract_annotations(response_data.get('amazon', {}).get('items', []), img_url)
-                annotations = annotations_amazon + annotations_google + annotations_clairifai
-
-                labels = [annotation['label'] for annotation in annotations]
-                keywords = ", ".join(labels)
-                keywords += img_name
-                caption = generateInstaCaption(keywords)
-                return render(request, 'app/dashboard.html',
-                              {'form': form, 'img_url': img_url, 'annotations': annotations, 'caption': caption, 'locations': locations})
-    else:
-        form = forms.fileDemoForm()
-
-    return render(request, 'app/dashboard.html', {'form': form, 'locations' : locations})
+    if last_review :
+        return render(request, 'app/dashboard.html', {'last_review': last_review, 'stars': stars, 'no_stars': no_stars,
+                                                  'last_insta_media': last_insta_media,
+                                                  'last_insta_comment': last_insta_comment})
+    return render(request, 'app/dashboard.html', {'last_insta_media': last_insta_media, 'last_insta_comment': last_insta_comment})
 
 
 def objectDetection(img_url):
@@ -148,6 +124,7 @@ def extract_annotations(items, img_url):
     print(annotations)
     return annotations
 
+
 def generateInstaCaption(keywords):
     openai.api_key = settings.OPENAI_KEY
     response = openai.ChatCompletion.create(
@@ -195,7 +172,7 @@ def getLocations(access_token, token, account_id):
         client_id=settings.CLIENT_ID,
         client_secret=settings.CLIENT_SECRET
     )
-
+    print()
     service = build('mybusinessbusinessinformation', 'v1', credentials=credentials)
 
     parentIUD = f"accounts/{account_id}"
@@ -204,14 +181,14 @@ def getLocations(access_token, token, account_id):
     return locations
 
 
-def get_openai_answer(reviews):
+def get_openai_answer_default(review):
     openai.api_key = settings.OPENAI_KEY
     response = openai.ChatCompletion.create(
-        model="gpt-4",
+        model="gpt-3.5-turbo",
         messages=[
             {"role": "system",
              "content": "You are the owner of the business responding to those reviews in the corresponding language. I want three answers: one formal labeled 'formal', one more friendly labeled 'friendly', and one with emojis labeled 'emoji'. Provide your answers in JSON format"},
-            {"role": "user", "content": reviews['reviews'][0]['comment']},
+            {"role": "user", "content": review},
         ]
     )
     content = response['choices'][0]['message']['content']
@@ -227,6 +204,21 @@ def get_openai_answer(reviews):
         'friendly': friendly_answer,
         'emoji': emoji_answer
     }
+
+
+def get_openai_answer(comment, preferences):
+    openai.api_key = settings.OPENAI_KEY
+
+    response = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo-1106",
+        messages=[
+            {"role": "system",
+             "content": "You are the owner of the business responding to those reviews in the corresponding language. I want an answer generated respecting these preferences : " + preferences},
+            {"role": "user", "content": comment},
+        ]
+    )
+    content = response['choices'][0]['message']['content']
+    return content
 
 
 def save_service(service_data):
@@ -305,12 +297,19 @@ def configGoogle(request):
         return render(request, 'app/configGoogle.html', {'location': locations['locations'][0], 'error': error_msg})
 
     reviews = response.json()
+    try:
+        review = reviews['reviews'][0]['comment']
+    except:
+        review = None
+    if review:
+        save_reviews(reviews, loc)
 
-    save_reviews(reviews, loc)
-
-    answers = ""
-    if not 'reviewReply' in reviews['reviews'][0]:
-        answers = get_openai_answer(reviews)
+        answers = ""
+        if not 'reviewReply' in reviews['reviews'][0]:
+            answers = get_openai_answer_default(review)
+    else:
+        review = "Nous avons passé un super moment dans votre restaurant ! Merci pour tout !"
+        answers = get_openai_answer_default(review)
 
     if request.method == "POST":
         if 'answerGenerationPreferences' in request.POST:
@@ -323,14 +322,13 @@ def configGoogle(request):
 
         locations_form = forms.LocationParametersForm(request.POST)
         if locations_form.is_valid():
-            location_instance = locations_form.save()
-            save_reviews(reviews, location_instance)
+            locations_form.save()
 
             # Present the OpenAI preference form to the user
             answer_preferences_form = AnswerPreferenceForm(request.POST, openai_answers=answers)
             return render(request, 'app/configGoogle.html',
                           {'answer_preferences_form': answer_preferences_form, 'location': locations['locations'][0],
-                           'reviews': reviews,
+                           'review': review,
                            'answers': answers})
 
 
@@ -338,7 +336,7 @@ def configGoogle(request):
         location_form = forms.LocationParametersForm(instance=loc)
 
     return render(request, 'app/configGoogle.html',
-                  {'location': locations['locations'][0], 'reviews': reviews, 'answers': answers,
+                  {'location': locations['locations'][0], 'review': review, 'answers': answers,
                    'locations_form': location_form})
 
 
@@ -360,7 +358,7 @@ def requestInstagramAccount(token):
 
 
 def saveMedia(request, media):
-    media_instance, created = InstagramMedia.objects.get_or_create(instagramMedia_id=media['id'], author=request.user)
+    media_instance, created = InstagramMedia.objects.get_or_create(instagram_media_id=media['id'], author=request.user)
 
     media_instance.media_url = media['media_url']
     media_instance.media_type = media['media_type']
@@ -370,16 +368,17 @@ def saveMedia(request, media):
     media_instance.save()
 
     if media['comments']:
-        return media['comments']
+        saveComments(media['comments'], media['id'])
 
 
-def saveComments(comments):
+def saveComments(comments, id):
     for comment in comments['data']:
         comment_instance, created = InstagramMediaComment.objects.get_or_create(
             instagram_media_comment_id=comment['id'])
 
         comment_instance.content = comment['text']
         comment_instance.send_at = datetime.datetime.strptime(comment['timestamp'], "%Y-%m-%dT%H:%M:%S%z")
+        comment_instance.media_related = InstagramMedia.objects.get(instagram_media_id=id)
 
         comment_instance.save()
 
@@ -395,9 +394,9 @@ def requestInstagramMedia(request, token, insta_id):
                                                                                          "id, caption, media_type, media_url, comments, timestamp",
                                                                                          token)
         response = requests.get(url)
-        comments = saveMedia(request, response.json())
-        comments['data'] = comments['data'][-3:]
-        saveComments(comments)
+        saveMedia(request, response.json())
+
+    return medias
 
 
 def configMeta(request):
@@ -422,7 +421,32 @@ def configMeta(request):
 
 
 def googleManager(request):
-    return render(request, 'app/googleManager.html')
+    locations = Location.objects.filter(owner=request.user)
+
+    last_review = Review.objects.filter(location=locations.last()).last()
+    if last_review:
+        stars = range(last_review.star_rating)
+        no_stars = range(5 - last_review.star_rating)
+
+        last_ten_reviews = Review.objects.filter(location=locations.last())[1:10]
+        generated_answer = get_openai_answer(last_review.comment, request.user.answerGenerationPreferences)
+
+        return render(request, 'app/googleManager.html', {'last_review': last_review, 'stars': stars, 'no_stars': no_stars,
+                                                          'generated_answer': generated_answer,
+                                                          'last_ten_reviews': last_ten_reviews})
+    return  render(request, 'app/googleManager.html')
+
+
+def googlePreferences(request):
+    if request.method == 'POST':
+        form = GooglePreferencesForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('app:googleManager')
+    else:
+        form = GooglePreferencesForm()
+
+    return render(request, 'app/googleManagerPreferences.html', {'form': form})
 
 
 def fbManager(request):
@@ -430,4 +454,16 @@ def fbManager(request):
 
 
 def instaManager(request):
-    return render(request, 'app/instaManager.html')
+    token = SocialToken.objects.get(account__user=request.user, account__provider='facebook')
+
+    insta_id = requestInstagramAccount(token)
+    requestInstagramMedia(request, token, insta_id)
+
+    insta_medias = InstagramMedia.objects.all().order_by('-published_at')
+
+    return render(request, 'app/instaManager.html', context={'insta_medias': insta_medias})
+
+class InstagramMediaDetailView(DetailView):
+    model = InstagramMedia
+    template_name = 'app/insta_media_detail.html'
+    context_object_name = 'insta_media'

@@ -22,7 +22,8 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         ('emoji', 'With Emojis')
     ]
 
-    answerGenerationPreferences = models.CharField(max_length=255, blank=True)  # Stores choices as comma-separated values
+    is_google_managed = models.BooleanField(default=False)
+    answerGenerationPreferences = models.CharField(max_length=255, blank=True)
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = ["username"]

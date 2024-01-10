@@ -1,5 +1,63 @@
-{% extends 'app/header.html' %}
+{% extends 'app/base.html' %}
 {% load static %}
+{% block header %}
+    {% include 'app/header.html' with locations=locations %}
+{% endblock %}
 {% block content %}
-    <p>GoogleManager</p>
+    {% load crispy_forms_tags %}
+    {% load mathfilters %}
+    
+    {% if last_review %}
+
+    <div class="card  card-google-dash col-4 text-center m-5">
+        <div class="card-header">{{ last_review.pub_at }}</div>
+        <div class="card-body">
+            <h4 class="card-title text-primary-emphasis">{{ last_review.reviewer_name }}</h4>
+            <p class="card-text text-dark">{{ last_review.comment }}</p>
+            <a href="{% url 'app:googleManager' %}" class="card-link">Voir plus </a>
+        </div>
+        <div class="card-footer"> {% for x in stars %}<i class="bi bi-star-fill text-primary"></i>{% endfor %}
+            {% for x in no_stars %}<i class="bi bi-star text-primary"></i>{% endfor %}</div>
+    </div>
+    <div class="col-4 text-center m-5">
+        <i class=" text-primary bi bi-arrow-down h1"></i>
+    </div>
+
+    <div class="card offset-1 col-4 m-5">
+        <div class="card-body">
+            {{ generated_answer }}
+        </div>
+    </div>
+
+    <div class="col-4 text-center m-5">
+        <button class="btn btn-primary">Publier</button>
+    </div>
+    
+    {% endif %}
+
+    {% if last_ten_reviews %}
+    	{% for review in last_ten_reviews %}
+        <div class="card mb-3">
+            <div class="row g-0">
+                <div class="col-md-4">
+                    <img src="{{ review.reviewer_picture_url }}" class="img-fluid rounded-start" alt="Reviewer">
+                </div>
+                <div class="col-md-8">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ review.reviewer_name }}</h5>
+                        <p class="card-text">{{ review.comment }}</p>
+                        <p class="card-text"><small class="text-muted">Rating: {{ review.star_rating }} Stars</small>
+                        </p>
+                        <p class="card-text"><small
+                                class="text-muted">Published: {{ review.pub_at|date:"M d, Y" }}</small></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+        {% else %}
+        <h2 class="h2 text-secondary"> Pas d'autres avis ...</h2>
+    {% endif %}
+
+
 {% endblock %}

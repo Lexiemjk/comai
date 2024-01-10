@@ -110,3 +110,7 @@
 .card {
     cursor: pointer;
 }
+
+.min-height-card {
+    height: min-content !important;
+}

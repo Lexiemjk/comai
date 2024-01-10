@@ -35,6 +35,7 @@ class Review(models.Model):
     star_rating = models.IntegerField()
     comment = models.CharField(max_length=255)
     location = models.ForeignKey(Location, on_delete=models.CASCADE, related_name='location_reviews')
+    pub_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.reviewer_name + " : " + str(self.star_rating) + "/5 : " + self.comment
@@ -55,7 +56,7 @@ class InstagramMedia(models.Model):
     published_at = models.DateTimeField(auto_now_add=True)
 
     def __str__ (self):
-        return self.instagramMedia_id
+        return self.instagram_media_id
 
 class InstagramMediaComment(models.Model):
     instagram_media_comment_id = models.CharField(max_length=30, primary_key=True)

@@ -3,14 +3,14 @@ from django import forms
 
 from .models import CustomUser
 
-class CustomUserCreationForm(UserCreationForm):
 
+class CustomUserCreationForm(UserCreationForm):
     class Meta:
         model = CustomUser
         fields = ("email",)
 
-class CustomUserChangeForm(UserChangeForm):
 
+class CustomUserChangeForm(UserChangeForm):
     class Meta:
         model = CustomUser
         fields = ("email",)
@@ -32,6 +32,19 @@ class AnswerPreferenceForm(forms.Form):
                 choices.append((key, display_value))
 
         self.fields['answerGenerationPreferences'].choices = choices
+
+
+class GooglePreferencesForm(forms.ModelForm):
+    class Meta:
+        model = CustomUser
+        fields = ['is_google_managed', 'answerGenerationPreferences']
+        widgets = {
+            'answerGenerationPreferences': forms.Select(choices=CustomUser.ANSWER_GENERATION_CHOICES,
+                                                        attrs={'class': 'form-select'}),
+            'is_google_managed': forms.CheckboxInput(
+                attrs={'class': 'form-check-input', 'type': 'checkbox', 'role': 'switch',
+                       'id': 'flexSwitchCheckDefault'})
+        }
 
 
 class finishConfigForm(forms.Form):
