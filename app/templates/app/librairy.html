@@ -1,0 +1,49 @@
+{% extends 'app/base.html' %}
+{% load static %}
+{% block header %}
+    {% include 'app/header.html' with locations=locations %}
+{% endblock %}
+{% block content %}
+    {% load crispy_forms_tags %}
+    {% load mathfilters %}
+
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'app:gcs_librairy' '' %}">Home</a></li>
+            {% with '' as base_path %}
+                {% for part in path_parts %}
+                    {% with base_path|add:part|add:'/' as base_path %}
+                        <li class="breadcrumb-item">
+                            <a href="{% url 'app:gcs_librairy' base_path %}">{{ part }}</a>
+                        </li>
+                    {% endwith %}
+                {% endfor %}
+            {% endwith %}
+        </ol>
+    </nav>
+
+    <!-- List of Folders -->
+    <div class="list-group mb-3">
+        {% for folder in folders %}
+            {% with folder|slice:":-1" as folder_name %}
+                <a href="{% url 'app:gcs_librairy' folder_name %}" class="list-group-item list-group-item-action">
+                    {{ folder_name }}
+                </a>
+            {% endwith %}
+        {% endfor %}
+    </div>
+
+
+    <!-- List of Files -->
+    <ul class="list-group">
+        {% for file in files %}
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                {{ file.name }}
+                <a href="{% url 'app:delete_file_from_gcs' file.name|urlencode %}"
+                   class="btn btn-danger btn-sm">Delete</a>
+            </li>
+        {% empty %}
+            <li class="list-group-item">No files in this folder.</li>
+        {% endfor %}
+    </ul>
+{% endblock %}

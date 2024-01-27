@@ -1,33 +1,307 @@
 {% extends 'app/base.html' %}
 {% load static %}
+
 {% block header %}
     {% include 'app/header.html' with locations=locations %}
 {% endblock %}
+
 {% block content %}
     {% load crispy_forms_tags %}
     {% load mathfilters %}
-    <h1>Instagram Manager</h1>
+    <h1 class="h1 text-primary">Instagram Manager</h1>
 
-    <div class="row">
-        {% for insta_media in insta_medias %}
-            <div class="card card-insta-dash col-2 text-center m-3">
-                <!-- Your card content here -->
-                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary">
-                    <i class="bi bi-instagram h2"></i>
-                    <span class="visually-hidden">Instagram</span>
-                </span>
-                <img width="300" src="{{ insta_media.media_url }}" class="card-img-top" alt="{{ insta_media.caption }}">
-                <div class="card-header">{{ insta_media.published_at }}</div>
-                <div class="card-body">
-                    <h4 class="card-title text-primary-emphasis">{{ insta_media.caption }}</h4>
-                    <a href="{% url 'app:insta_media_detail' pk=insta_media.instagram_media_id %}" class="card-link">Voir plus</a>
+    <div id="publication-container my-5">
+        <div class="card text-center ">
+            <div class="row g-0">
+                <div class="col-md-8 js--image-preview">
+                    <img src="https://placehold.co/1080" class="img-fluid rounded-start" alt="placehold">
+                </div>
+                <div class="col-md-4">
+                    <div class="card-body">
+                        <div class="dropdown" id="pub-dropdown-menu">
+                            <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                                    aria-expanded="false">
+                                upload
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#">Choose from Librairy</a></li>
+                                <li><label class="dropdown-item"> Choose from your computer<input type="file"
+                                                                                                  class="image-upload"
+                                                                                                  accept="image/*"></label>
+                                </li>
+                            </ul>
+                        </div>
+                        <form>
+                            <div class="mb-3">
+                                <label for="caption" class="form-label">Caption</label>
+                                <input type="text" class="form-control" id="caption"
+                                       aria-describedby="emailHelp">
+                            </div>
+                            <div class="mb-3">
+                                <label for="datetime" class="form-label">Date</label>
+                                <input type="date" class="form-control" id="datetime">
+                            </div>
+                            <div class="mb-3 form-check">
+                                <input type="checkbox" class="form-check-input" id="comments_enabled">
+                                <label class="form-check-label" for="comments_enabled">Are comments allowed ?</label>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </form>
+                    </div>
                 </div>
             </div>
-
-            {% if forloop.counter|divisibleby:3 and not forloop.last %}
-                </div><div class="row">
-            {% endif %}
-        {% endfor %}
+        </div>
     </div>
+
+    <div id="post-container"></div>
+    {% csrf_token %}
+{% endblock %}
+
+{% block script %}
+    <script>
+        // CSRF token needed for POST requests
+        const csrfToken = '{{ csrf_token }}';
+
+        document.addEventListener('DOMContentLoaded', fetchRecentPosts);
+
+        async function fetchRecentPosts() {
+            const response = await fetch("{% url 'app:fetch_recent_posts' %}");
+            const posts = await response.json();
+
+            const postContainer = document.querySelector('#post-container');
+            for (const post of posts) {
+                // Create the card div
+                const cardDiv = document.createElement('div');
+                cardDiv.className = 'card mb-3';
+                cardDiv.id = `post-${post.media_id}`;
+
+                // Create card body
+                const cardBody = document.createElement('div');
+                cardBody.className = 'card-body';
+
+                // Add post content to card body
+                cardBody.innerHTML = `
+            <h5 class="card-title">Post Caption: ${post.caption}</h5>
+            <p class="card-text">Published on: ${post.published_at}</p>
+        `;
+
+                // Add button to load comments
+                const commentButton = document.createElement('button');
+                commentButton.className = 'btn btn-primary';
+                commentButton.textContent = 'See Comments';
+                commentButton.addEventListener('click', () => fetchComments(post.media_id));
+                cardBody.appendChild(commentButton);
+
+                // Append card body to card div
+                cardDiv.appendChild(cardBody);
+
+                // Append card to container
+                postContainer.appendChild(cardDiv);
+            }
+        }
+
+
+        async function fetchComments(mediaId) {
+            const response = await fetch(`/app/instagramManager/fetch_recent_comments/${mediaId}/`);
+            const data = await response.json();
+            const comments = data.comments;
+
+            const cardDiv = document.querySelector(`#post-${mediaId}`);
+
+            // Create a list group for comments
+            const commentList = document.createElement('ul');
+            commentList.className = 'list-group list-group-flush';
+
+            for (const comment of comments) {
+                // Create a list item for each comment
+                const commentLi = document.createElement('li');
+                commentLi.className = 'list-group-item';
+
+                const commentContent = document.createElement('div');
+                commentContent.textContent = `Comment: ${comment.content}, Published at: ${comment.send_at}`;
+                commentLi.appendChild(commentContent);
+
+                const responseTextarea = document.createElement('textarea');
+                responseTextarea.id = `response-${comment.instagram_media_comment_id}`;
+                responseTextarea.className = 'form-control mb-2';
+                responseTextarea.style.display = 'none';  // Initially hidden
+                commentLi.appendChild(responseTextarea);
+
+                const loadingIcon = document.createElement('div');
+                loadingIcon.id = `loading-icon-${comment.instagram_media_comment_id}`;
+                loadingIcon.className = 'spinner-border text-primary';
+                loadingIcon.role = 'status';
+                loadingIcon.style.display = 'none';  // Initially hidden
+                commentLi.appendChild(loadingIcon);
+
+                // Add buttons to comment list item
+                const genBtn = document.createElement('button');
+                genBtn.className = 'btn btn-secondary btn-sm';
+                genBtn.textContent = 'Generate';
+                genBtn.addEventListener('click', () => generateResponse('Caption Placeholder', comment.content, comment.instagram_media_comment_id));
+                commentLi.appendChild(genBtn);
+
+                const pubBtn = document.createElement('button');
+                pubBtn.className = 'btn btn-success btn-sm';
+                pubBtn.textContent = 'Publish';
+                pubBtn.addEventListener('click', () => publishResponse(comment.instagram_media_comment_id));
+                commentLi.appendChild(pubBtn);
+
+                commentList.appendChild(commentLi);
+            }
+
+            // Append the comment list to the card
+            cardDiv.appendChild(commentList);
+        }
+
+
+        function generateResponse(caption, comment, commentId) {
+            const loadingIcon = document.getElementById(`loading-icon-${commentId}`);
+            loadingIcon.style.display = 'inline-block';
+
+            fetch("{% url 'app:generate_response' %}", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                body: JSON.stringify({caption: caption, comment: comment})
+            })
+                .then(response => response.json())
+                .then(data => {
+                    loadingIcon.style.display = 'none';  // Hide loading icon
+                    const responseTextarea = document.getElementById(`response-${commentId}`);
+                    responseTextarea.value = data.response;
+                    responseTextarea.style.display = 'block';  // Show textarea
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    loadingIcon.style.display = 'none';
+                });
+        }
+
+
+        function publishResponse(commentId) {
+            const responseTextarea = document.getElementById(`response-${commentId}`);
+            const responseMessage = responseTextarea.value;
+
+            fetch("{% url 'app:post_instagram_comment_reply' %}", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                body: JSON.stringify({comment_id: commentId, response_message: responseMessage})
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.success) {
+                        console.log('Response published to Facebook.');
+                        // Optionally, update UI to reflect the published state
+                    } else {
+                        throw new Error(data.error + ': ' + data.details);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error.message);
+                });
+        }
+
+        function initImageUpload(box) {
+            let uploadField = box.querySelector('.image-upload');
+
+            uploadField.addEventListener('change', getFile);
+
+            function getFile(e) {
+                let file = e.currentTarget.files[0];
+                checkType(file);
+            }
+
+            function previewImage(file) {
+                let thumb = box.querySelector('.js--image-preview'),
+                    reader = new FileReader();
+
+                reader.onload = function () {
+                    thumb.style.backgroundImage = 'url(' + reader.result + ')';
+                }
+                reader.readAsDataURL(file);
+                thumb.className += ' js--no-default';
+            }
+
+            function checkType(file) {
+                let imageType = /image.*/;
+                if (!file.type.match(imageType)) {
+                    throw 'Datei ist kein Bild';
+                } else if (!file) {
+                    throw 'Kein Bild gewählt';
+                } else {
+                    previewImage(file);
+                }
+            }
+
+        }
+
+        // initialize box-scope
+        var boxes = document.querySelectorAll('.box');
+
+        for (let i = 0; i < boxes.length; i++) {
+            let box = boxes[i];
+            initDropEffect(box);
+            initImageUpload(box);
+        }
+
+
+        /// drop-effect
+        function initDropEffect(box) {
+            let area, drop, areaWidth, areaHeight, maxDistance, dropWidth, dropHeight, x, y;
+
+            // get clickable area for drop effect
+            area = box.querySelector('.js--image-preview');
+            area.addEventListener('click', fireRipple);
+
+            function fireRipple(e) {
+                area = e.currentTarget
+                // create drop
+                if (!drop) {
+                    drop = document.createElement('span');
+                    drop.className = 'drop';
+                    this.appendChild(drop);
+                }
+                // reset animate class
+                drop.className = 'drop';
+
+                // calculate dimensions of area (longest side)
+                areaWidth = getComputedStyle(this, null).getPropertyValue("width");
+                areaHeight = getComputedStyle(this, null).getPropertyValue("height");
+                maxDistance = Math.max(parseInt(areaWidth, 10), parseInt(areaHeight, 10));
+
+                // set drop dimensions to fill area
+                drop.style.width = maxDistance + 'px';
+                drop.style.height = maxDistance + 'px';
+
+                // calculate dimensions of drop
+                dropWidth = getComputedStyle(this, null).getPropertyValue("width");
+                dropHeight = getComputedStyle(this, null).getPropertyValue("height");
+
+                // calculate relative coordinates of click
+                // logic: click coordinates relative to page - parent's position relative to page - half of self height/width to make it controllable from the center
+                x = e.pageX - this.offsetLeft - (parseInt(dropWidth, 10) / 2);
+                y = e.pageY - this.offsetTop - (parseInt(dropHeight, 10) / 2) - 30;
+
+                // position drop and animate
+                drop.style.top = y + 'px';
+                drop.style.left = x + 'px';
+                drop.className += ' animate';
+                e.stopPropagation();
+
+            }
+        }
+
+    </script>
 
 {% endblock %}
